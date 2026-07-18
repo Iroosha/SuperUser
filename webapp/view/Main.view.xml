@@ -1,0 +1,66 @@
+<mvc:View
+    controllerName="superusermanagement.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:smartvariants="sap.ui.comp.smartvariants"
+    xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns="sap.m">
+    <Page id="page" title="Super User Management" showHeader="false" class="sapUiContentPadding">
+        <content>
+
+            <smartvariants:SmartVariantManagement
+                id="pageVariantManagement"
+                persistencyKey="superUserManagementPageVariantKey"
+                showShare="true" />
+
+            <!-- 1. The Smart Filter Bar (Note: basicSearchControl is omitted to keep search hidden) -->
+            <smartFilterBar:SmartFilterBar 
+                id="smartFilterBar" 
+                entitySet="FCPUserSet" 
+                enableBasicSearch="false"
+                smartVariant="pageVariantManagement"
+                persistencyKey="superUserFilterBarVariantKey"
+                assignedFiltersChanged="onAssignedFiltersChanged"
+                class="sapUiTinyMarginTop"
+                initialise="onFilterBarInitialise">
+            </smartFilterBar:SmartFilterBar>
+
+            <!-- 2. The Smart Table linked directly to the filter bar above -->
+            <smartTable:SmartTable 
+                id="smartTable" 
+                entitySet="FCPUserSet" 
+                smartFilterId="smartFilterBar" 
+                smartVariant="pageVariantManagement"
+                persistencyKey="superUserTableVariantKey"
+                useVariantManagement="true"
+                tableType="ResponsiveTable" 
+                useExportToExcel="true" 
+                useTablePersonalisation="true" 
+                header="Users" 
+                showRowCount="true" 
+                enableAutoBinding="true"
+                initiallyVisibleFields="CustomerNo,Title,FirstName,LastName,Email,Phone,IsActive,SAPUserName"
+                beforeRebindTable="onBeforeRebindTable">
+                
+                <smartTable:customToolbar>
+                    <OverflowToolbar id="tableToolbar">
+                        <ToolbarSpacer />
+                        <Button 
+                            id="btnCreateUser" 
+                            text="Create User" 
+                            icon="sap-icon://add" 
+                            type="Transparent" 
+                            press="onCreateUser" />
+                    </OverflowToolbar>
+                </smartTable:customToolbar>
+                <!-- For UI5 1.71, define the row interaction behavior on the inner responsive table directly -->
+                <Table id="innerUserTable">
+                    <!-- The columns will be dynamically populated via your local annotations file -->
+                    <items>
+                        <ColumnListItem id="userRowTemplate" type="Navigation" press="onRowPress" />
+                    </items>
+                </Table>
+            </smartTable:SmartTable>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: superusermanagement
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: https://vhbatdevci.sap.bscor:44300
+          client: '050'
+        app:
+          name: ZSUPER_USER
+          description: Super User Management
+          package: ZUI_SUPER_USER
+          transport: DEVK969595
+        exclude:
+          - /test/
+          - /localService/

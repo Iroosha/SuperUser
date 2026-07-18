@@ -1,0 +1,40 @@
+{
+  "fileName": "id_1784196212600_25_addFavorite",
+  "fileType": "change",
+  "changeType": "addFavorite",
+  "moduleName": "",
+  "reference": "superusermanagement.Component",
+  "packageName": "",
+  "content": {
+    "key": "*standard*",
+    "visible": true
+  },
+  "selector": {
+    "persistencyKey": "superUserManagementPageVariantKey"
+  },
+  "layer": "USER",
+  "texts": {},
+  "namespace": "apps/superusermanagement/changes/",
+  "projectId": "superusermanagement",
+  "creation": "",
+  "originalLanguage": "EN",
+  "conditions": {},
+  "context": "",
+  "support": {
+    "generator": "Change.createInitialFileContent",
+    "service": "",
+    "user": "",
+    "sapui5Version": "1.71.80",
+    "sourceChangeFileName": "",
+    "compositeCommand": ""
+  },
+  "oDataInformation": {},
+  "dependentSelector": {},
+  "validAppVersions": {
+    "creation": "0.0.1",
+    "from": "0.0.1"
+  },
+  "jsOnly": false,
+  "variantReference": "",
+  "appDescriptorChange": false
+}

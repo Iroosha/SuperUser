@@ -1,0 +1,49 @@
+{
+  "fileName": "id_1784196259566_82_page",
+  "fileType": "variant",
+  "changeType": "page",
+  "moduleName": "",
+  "reference": "superusermanagement.Component",
+  "packageName": "",
+  "content": {
+    "superUserTableVariantKey": {},
+    "superUserFilterBarVariantKey": {
+      "version": "V3",
+      "filterbar": [],
+      "filterBarVariant": "{\"IsActive\":{\"value\":null,\"ranges\":[{\"exclude\":false,\"operation\":\"EQ\",\"keyField\":\"IsActive\",\"value1\":true,\"value2\":null,\"tokenText\":\"=Yes\"}],\"items\":[]},\"CreatedBy\":{\"value\":null,\"ranges\":[],\"items\":[]},\"CreatedOn\":{\"value\":null,\"ranges\":[],\"items\":[]},\"CustomerNo\":{\"value\":null,\"ranges\":[],\"items\":[]},\"Email\":{\"value\":null,\"ranges\":[],\"items\":[]},\"FirstName\":{\"value\":null,\"ranges\":[],\"items\":[]},\"LastName\":{\"value\":null,\"ranges\":[],\"items\":[]},\"Title\":{\"value\":null,\"ranges\":[],\"items\":[]},\"Phone\":{\"value\":null,\"ranges\":[],\"items\":[]},\"SapUserName\":{\"value\":null,\"ranges\":[],\"items\":[]},\"IsSuper\":{\"value\":null,\"ranges\":[],\"items\":[]},\"LastUpdatedBy\":{\"value\":null,\"ranges\":[],\"items\":[]},\"LastUpdatedDate\":{\"value\":null,\"ranges\":[],\"items\":[]},\"LastLoginDateTime\":{\"value\":null,\"ranges\":[],\"items\":[]}}"
+    }
+  },
+  "selector": {
+    "persistencyKey": "superUserManagementPageVariantKey"
+  },
+  "layer": "CUSTOMER",
+  "texts": {
+    "variantName": {
+      "value": "MyVariant",
+      "type": "XFLD"
+    }
+  },
+  "namespace": "apps/superusermanagement/changes/",
+  "projectId": "superusermanagement",
+  "creation": "",
+  "originalLanguage": "EN",
+  "conditions": {},
+  "context": "",
+  "support": {
+    "generator": "Change.createInitialFileContent",
+    "service": "",
+    "user": "",
+    "sapui5Version": "1.71.80",
+    "sourceChangeFileName": "",
+    "compositeCommand": ""
+  },
+  "oDataInformation": {},
+  "dependentSelector": {},
+  "validAppVersions": {
+    "creation": "0.0.1",
+    "from": "0.0.1"
+  },
+  "jsOnly": false,
+  "variantReference": "",
+  "appDescriptorChange": false
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZFCP_USER_MANAGEMENT_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="FCPUser" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Email"/>
+                </Key>
+                <Property Name="Email" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Customer email address"/>
+                <Property Name="CustomerNo" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Customer number"/>
+                <Property Name="Title" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Title"/>
+                <Property Name="FirstName" Type="Edm.String" MaxLength="35" sap:unicode="false" sap:label="First name"/>
+                <Property Name="LastName" Type="Edm.String" MaxLength="35" sap:unicode="false" sap:label="Last name"/>
+                <Property Name="Phone" Type="Edm.String" MaxLength="16" sap:unicode="false" sap:label="Phone no"/>
+                <Property Name="IsActive" Type="Edm.Boolean" sap:unicode="false" sap:label="Is active"/>
+                <Property Name="IsSuper" Type="Edm.Boolean" sap:unicode="false" sap:label="Is super flag"/>
+                <Property Name="SapUserName" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="User Name"/>
+                <Property Name="CreatedOn" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Created on timestamp"/>
+                <Property Name="CreatedBy" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Created by"/>
+                <Property Name="LastUpdatedBy" Type="Edm.String" MaxLength="35" sap:unicode="false" sap:label="Last updated by"/>
+                <Property Name="LastUpdatedDate" Type="Edm.String" MaxLength="35" sap:unicode="false" sap:label="Last updated timestamp"/>
+                <Property Name="LastLoginDateTime" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Last login date time"/>
+            </EntityType>
+            <EntityContainer Name="ZFCP_USER_MANAGEMENT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="FCPUserSet" EntityType="ZFCP_USER_MANAGEMENT_SRV.FCPUser" sap:creatable="true" sap:updatable="true" sap:deletable="true" sap:pageable="false" sap:content-version="1" sap:searchable="false"/>
+            </EntityContainer>
+            <atom:link rel="self" href="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

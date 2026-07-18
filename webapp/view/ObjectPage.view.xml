@@ -1,0 +1,167 @@
+<mvc:View
+    controllerName="superusermanagement.controller.ObjectPage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:uxap="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m">
+    <uxap:ObjectPageLayout id="objectPageLayout" showTitleInHeaderContent="false">
+        
+        <!-- Header Title (Top Bar: Primary info goes here) -->
+        <uxap:headerTitle>
+            <uxap:ObjectPageHeader 
+                objectTitle="{FirstName} {LastName}" 
+                objectSubtitle="{Email}"
+                isObjectIconAlwaysVisible="false"
+                showPlaceholder="false">
+
+                <uxap:actions>
+                    <uxap:ObjectPageHeaderActionButton 
+                        text="Edit" 
+                        type="Emphasized" 
+                        press="onEdit" 
+                        hideText="false"
+                        importance="High"
+                        visible="{= !${ui>/isEditMode} }" />
+                    
+                    <uxap:ObjectPageHeaderActionButton 
+                        text="Save"
+                        type="Emphasized"                         
+                        press=".onSave" 
+                        hideText="false"
+                        importance="High"
+                        visible="{ui>/isEditMode}" />
+                    <uxap:ObjectPageHeaderActionButton 
+                        text="Cancel" 
+                        type="Default"
+                        press="onCancel" 
+                        hideText="false"
+                        importance="High"
+                        visible="{ui>/isEditMode}" />
+                </uxap:actions>
+            </uxap:ObjectPageHeader>
+        </uxap:headerTitle>
+
+        <uxap:sections>
+            <uxap:ObjectPageSection title="General Information">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection>
+                        <uxap:blocks>
+
+                            <!-- <form:SimpleForm 
+                                class="compactFormLayout"
+                                layout="ResponsiveGridLayout"
+                                editable="true"
+                                adjustLabelSpan="false"
+                                labelSpanXL="3"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                emptySpanXL="4"
+                                emptySpanL="4"
+                                emptySpanM="2"
+                                emptySpanS="0"
+                                columnsXL="1"
+                                columnsL="1"
+                                columnsM="1"> -->
+
+
+                           <form:SimpleForm 
+                                layout="ResponsiveGridLayout"
+                                editable="true"
+                                adjustLabelSpan="false"
+                                labelSpanL="3"
+                                emptySpanL="0"
+                                columnsL="1">
+
+                                <Label text="Customer Number" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{CustomerNo}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input id="CustomerNo" value="{CustomerNo}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+                                                            
+                                <!-- <Label text="Customer Number" design="Bold"/>
+                                <Text text="{CustomerNo}" visible="{= !${ui>/isEditMode} }" class="sapUiTinyMarginBottom"/>
+                                <Input id="CustomerNo" value="{CustomerNo}" visible="{ui>/isEditMode}" class="sapUiTinyMarginBottom"/> -->
+
+                                <Label text="Title" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{Title}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input id="Title" value="{Title}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+
+                                <Label text="First Name" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{FirstName}" visible="{= !${ui>/isEditMode} }" class="sapUiTinyMarginBottom"/>
+                                    <Input id="FirstName" value="{FirstName}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+
+                                <Label text="Last Name" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{LastName}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input id="LastName" value="{LastName}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+                                
+                                <Label text="Status" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{= ${IsActive} ? 'Active' : 'Inactive' }" visible="{= !${ui>/isEditMode} }"/>
+                                    <CheckBox id="IsActive" selected="{IsActive}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+                               
+                                <Label text="Email" design="Bold" class="sapUiTinyMarginBottom" required="true" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{Email}" visible="{= !${ui>/isEditMode} }" textAlign="Begin" />
+                                    <Input id="Email" value="{Email}" visible="{ui>/isEditMode}" required="true" textAlign="Begin" width="350px" />
+                                </HBox>
+
+                                <Label text="Phone" design="Bold"  textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{Phone}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input id="Phone" value="{Phone}" visible="{ui>/isEditMode}"/>
+                                </HBox>
+
+                                <Label text="SAP User Name" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{SapUserName}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input value="{SapUserName}" visible="{ui>/isEditMode}" editable="false"/>
+                                </HBox>
+
+                                <Label text="Created By" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{CreatedBy}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input value="{CreatedBy}" visible="{ui>/isEditMode}" editable="false" width="350px"/>
+                                </HBox>
+
+                                <Label text="Created On" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{CreatedOn}" visible="{= !${ui>/isEditMode} }"/>
+                                    <Input value="{CreatedOn}" visible="{ui>/isEditMode}" editable="false" width="350px"/>
+                                </HBox>
+
+                                <Label text="Last Updated By" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{LastUpdatedBy}" visible="{= !${ui>/isEditMode} }" />
+                                    <Input value="{LastUpdatedBy}" visible="{ui>/isEditMode}" editable="false" width="350px"/>
+                                </HBox>
+
+                                <Label text="Last Updated At" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{LastUpdatedDate}" visible="{= !${ui>/isEditMode} }"/> 
+                                    <Input value="{LastUpdatedDate}" visible="{ui>/isEditMode}" editable="false" width="350px"/>
+                                </HBox>
+
+                                <Label text="Last Login At" design="Bold" textAlign="End"/>
+                                <HBox alignItems="Center">
+                                    <Text text="{LastLoginDateTime}" visible="{= !${ui>/isEditMode} }"/>                          
+                                    <Input value="{LastLoginDateTime}" visible="{ui>/isEditMode}" editable="false" width="350px"/>
+                                </HBox>
+
+                            </form:SimpleForm>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
+
+    </uxap:ObjectPageLayout>
+</mvc:View>

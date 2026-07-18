@@ -1,0 +1,15 @@
+/* 1. Reduce the wide width allocated to the label cells */
+.compactFormLayout .sapUiFormElementLbl.sapUiGridElement.sapUiGridVisibleL {
+    width: 20% !important;
+}
+
+/* 2. Increase the width of the input field container to fill the missing space */
+.compactFormLayout .sapUiGridElement.sapUiGridVisibleL:not(.sapUiFormElementLbl) {
+    width: 55% !important;
+}
+
+/* 3. Ensure the input components stretch completely inside their new wider wrapper */
+.compactFormLayout .sapMInputBase, 
+.compactFormLayout .sapMText {
+    width: 100% !important;
+}

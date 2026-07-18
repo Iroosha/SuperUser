@@ -1,0 +1,170 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata">
+        <edmx:Include Namespace="ZFCP_USER_MANAGEMENT_SRV"/>
+    </edmx:Reference>    
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+             <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser">
+                <Annotation Term="com.sap.vocabularies.UI.v1.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="User Detail"/>
+                        <PropertyValue Property="TypeNamePlural" String="User Details"/>
+                        
+                        <!-- Big Main Title: Displays the Customer Number -->
+                        <PropertyValue Property="Title">
+                            <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                <PropertyValue Property="Value" Path="CustomerNo"/>
+                            </Record>
+                        </PropertyValue>
+                        
+                        <!-- Sub Text Subtitle: Points directly to your connected properties configuration -->
+                        <PropertyValue Property="Description">
+                            <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                <PropertyValue Property="Value" Path="Email"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Org.OData.Capabilities.V1.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false" />
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>IsActive</PropertyPath>
+                        <PropertyPath>CreatedBy</PropertyPath>
+                        <PropertyPath>CreatedOn</PropertyPath>
+                        <PropertyPath>CustomerNo</PropertyPath>
+                        <PropertyPath>Email</PropertyPath>
+                        <PropertyPath>FirstName</PropertyPath>
+                        <PropertyPath>LastName</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <!-- This column will be automatically ticked on load -->
+                        <Record Type="UI.DataField">
+                            <Value Path="CustomerNo" />
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <Value Path="FirstName" />
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <Value Path="LastName" />
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <Value Path="Email" />
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <Value Path="Phone" />
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <Value Path="IsActive" />
+                        </Record> 
+                    </Collection>
+                </Annotation>
+                <Annotation Term="com.sap.vocabularies.UI.v1.Facets">
+                    <Collection>
+                        <Record Type="com.sap.vocabularies.UI.v1.ReferenceFacet">
+                            <PropertyValue Property="Label" String="User Details"/>
+                            <PropertyValue Property="ID" String="UserDetailsSection"/>
+                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#UserCreationFields"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <!-- 2. Define the Actual Input Fields inside that Section -->
+                <Annotation Term="com.sap.vocabularies.UI.v1.FieldGroup" Qualifier="UserCreationFields">
+                    <Record>
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="CustomerNo"/>
+                                    <PropertyValue Property="Label" String="Customer Number"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="Title"/>
+                                    <PropertyValue Property="Label" String="Title"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="FirstName"/>
+                                    <PropertyValue Property="Label" String="First Name"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="LastName"/>
+                                    <PropertyValue Property="Label" String="Last Name"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="Email"/>
+                                    <PropertyValue Property="Label" String="Email Address"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="Phone"/>
+                                    <PropertyValue Property="Label" String="Telephone"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="SapUserName"/>
+                                    <PropertyValue Property="Label" String="SAP User Name"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="IsActive"/>
+                                    <PropertyValue Property="Label" String="Is Active"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="IsSuper"/>
+                                    <PropertyValue Property="Label" String="Is Super"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="CreatedBy"/>
+                                    <PropertyValue Property="Label" String="Created By"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="CreatedOn"/>
+                                    <PropertyValue Property="Label" String="Created On"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="LastUpdatedBy"/>
+                                    <PropertyValue Property="Label" String="Last Updated By"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="LastUpdatedDate"/>
+                                    <PropertyValue Property="Label" String="Last Updated On"/>
+                                </Record>
+                                <Record Type="com.sap.vocabularies.UI.v1.DataField">
+                                    <PropertyValue Property="Value" Path="LastLoginDateTime"/>
+                                    <PropertyValue Property="Label" String="Last Login At"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/CreatedOn">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations>
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/CreatedBy">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations>  
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/LastUpdatedBy">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations>
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/LastUpdatedDate">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations> 
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/LastLoginDateTime">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations>       
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/SapUserName">
+                <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
+            </Annotations>    
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
