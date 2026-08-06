@@ -48,24 +48,6 @@
                     <uxap:ObjectPageSubSection>
                         <uxap:blocks>
 
-                            <!-- <form:SimpleForm 
-                                class="compactFormLayout"
-                                layout="ResponsiveGridLayout"
-                                editable="true"
-                                adjustLabelSpan="false"
-                                labelSpanXL="3"
-                                labelSpanL="3"
-                                labelSpanM="4"
-                                labelSpanS="12"
-                                emptySpanXL="4"
-                                emptySpanL="4"
-                                emptySpanM="2"
-                                emptySpanS="0"
-                                columnsXL="1"
-                                columnsL="1"
-                                columnsM="1"> -->
-
-
                            <form:SimpleForm 
                                 layout="ResponsiveGridLayout"
                                 editable="true"
@@ -77,7 +59,7 @@
                                 <Label text="Customer Number" design="Bold" textAlign="End"/>
                                 <HBox alignItems="Center">
                                     <Text text="{CustomerNo}" visible="{= !${ui>/isEditMode} }"/>
-                                    <Input id="CustomerNo" value="{CustomerNo}" visible="{ui>/isEditMode}"/>
+                                    <Input id="CustomerNo" value="{CustomerNo}" visible="{ui>/isEditMode}" showValueHelp="true" valueHelpRequest="onCustomerValueHelpRequest"/>
                                 </HBox>
                                                             
                                 <!-- <Label text="Customer Number" design="Bold"/>

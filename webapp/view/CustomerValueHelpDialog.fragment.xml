@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="customerValueHelpDialog"
+        title="Select Customer"
+        noDataText="No Customers Found"
+        items="{path: '/CustomerValueHelpSet'}" 
+        search="onCustomerValueHelpSearch"
+        confirm="onCustomerValueHelpConfirm"
+        cancel="onCustomerValueHelpCancel">
+        
+        
+        <StandardListItem
+            title="{CustomerNo}"
+            description="{CustomerName}"
+            icon="sap-icon://customer"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

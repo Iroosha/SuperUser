@@ -120,24 +120,62 @@ sap.ui.define([
                 oModel.update(sPath, oPayload, mParameters);
             }
 
+        },
 
-            // oModel.submitChanges({
-            //     success: function (oData, response) {
-            //         this.getView().setBusy(false);
-            //         oUiModel.setProperty("/isEditMode", false);
-            //         sap.m.MessageToast.show("User updated successfully!");
-                    
-            //         // Re-enable batching if you use it elsewhere in your app
-            //        // oModel.setUseBatch(true);
-            //     }.bind(this),
-            //     error: function (oError) {
-            //         this.getView().setBusy(false);
-            //         sap.m.MessageToast.show("Error saving data.");
-                    
-            //         // Re-enable batching
-            //         //oModel.setUseBatch(true);
-            //     }.bind(this)
-            // });
+        //Triggered when clicking the input field value help icon
+        onCustomerValueHelpRequest: function (oEvent) {
+            var oView = this.getView();
+
+            // Load the fragment asynchronously to preserve performance
+            if (!this._pCustomerValueHelpDialog) {
+                this._pCustomerValueHelpDialog = sap.ui.core.Fragment.load({
+                    id: oView.getId(),
+                    name: "superusermanagement.view.CustomerValueHelpDialog", 
+                    controller: this
+                }).then(function (oDialog) {
+                    oView.addDependent(oDialog);
+                    return oDialog;
+                });
+            }
+
+            this._pCustomerValueHelpDialog.then(function(oDialog) {
+                // Open the dialog
+                oDialog.open();
+            });
+        },
+
+        //Triggered when typing into the search bar inside the pop-up
+        onCustomerValueHelpSearch: function (oEvent) {
+            var sValue = oEvent.getParameter("value");
+            // Replace "CustomerNo" with the search field property name in your OData entity set
+            var oFilter = new sap.ui.model.Filter("CustomerNo", sap.ui.model.FilterOperator.Contains, sValue);
+            
+            var oBinding = oEvent.getSource().getBinding("items");
+            oBinding.filter([oFilter]);
+
+        },
+
+        // Triggered when choosing a customer from the selection list
+        onCustomerValueHelpConfirm: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+            var oInput = this.getView().byId("CustomerNo");
+
+            if (!oSelectedItem) {
+                return;
+            }
+
+            // Get the technical title property value from the chosen standard list item
+            var sSelectedCustomerNo = oSelectedItem.getTitle();
+            
+            // Set the value inside your bound field framework UI component
+            oInput.setValue(sSelectedCustomerNo);
+
+            // Explicitly sync the change back to the active underlying OData draft/context entry buffer
+            var oContext = this.getView().getBindingContext();
+            if (oContext) {
+                var oModel = this.getView().getModel();
+                oModel.setProperty(oContext.getPath() + "/CustomerNo", sSelectedCustomerNo);
+            }
         }
     });
 });
