@@ -1,6 +1,7 @@
 <edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
     <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
         <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
     </edmx:Reference>
     <edmx:Reference Uri="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata">
         <edmx:Include Namespace="ZFCP_USER_MANAGEMENT_SRV"/>
@@ -164,7 +165,51 @@
 
             <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/SapUserName">
                 <Annotation Term="com.sap.vocabularies.Common.v1.FieldControl" EnumMember="com.sap.vocabularies.Common.v1.FieldControlType/ReadOnly"/>
-            </Annotations>    
+            </Annotations>
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.CustomerValueHelp/CustomerNo">
+                <Annotation Term="com.sap.vocabularies.UI.v1.HiddenFilter" Bool="true"/>
+            </Annotations>
+
+            <!-- 2. EMPTY SELECTION FIELDS ON VALUE HELP ENTITY -->
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.CustomerValueHelp">
+                <Annotation Term="com.sap.vocabularies.UI.v1.SelectionFields">
+                    <Collection>
+                        <!-- Leaving this empty prevents sub-filters from rendering in the dialog -->
+                        <!-- while keeping the main top basic Search field intact. -->
+                    </Collection>
+                </Annotation>
+            </Annotations>
+
+            <Annotations Target="ZFCP_USER_MANAGEMENT_SRV.FCPUser/CustomerNo">
+                
+                <Annotation Term="com.sap.vocabularies.Common.v1.ValueList">
+                    <Record Type="com.sap.vocabularies.Common.v1.ValueListType">
+                        <!-- The EntitySet in your Gateway Service that serves as the customer lookup list -->
+                        <PropertyValue Property="CollectionPath" String="CustomerValueHelpSet" />
+                        <PropertyValue Property="SearchSupported" Bool="true" />
+                        <!-- <PropertyValue Property="SearchSupported" Bool="false" /> -->
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <!-- Maps selected value back to CustomerNo in SmartFilterBar -->
+                                <!-- <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut"> -->
+                                <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="CustomerNo" />
+                                    <PropertyValue Property="ValueListProperty" String="CustomerNo" />
+                                </Record>
+                                
+                                <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CustomerNo" />
+                                </Record>
+                                <!-- Additional search help columns shown in the Value Help dialog -->
+                                <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CustomerName" />
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>       
         </Schema>
     </edmx:DataServices>
 </edmx:Edmx>

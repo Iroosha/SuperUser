@@ -21,8 +21,18 @@
                 <Property Name="LastUpdatedDate" Type="Edm.String" MaxLength="35" sap:unicode="false" sap:label="Last updated timestamp"/>
                 <Property Name="LastLoginDateTime" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Last login date time"/>
             </EntityType>
+
+            <EntityType Name="CustomerValueHelp" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="CustomerNo"/>
+                </Key>
+                <Property Name="CustomerNo" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Customer number"/>
+                <Property Name="CustomerName" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="Customer Name"/>
+            </EntityType>
+
             <EntityContainer Name="ZFCP_USER_MANAGEMENT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="FCPUserSet" EntityType="ZFCP_USER_MANAGEMENT_SRV.FCPUser" sap:creatable="true" sap:updatable="true" sap:deletable="true" sap:pageable="false" sap:content-version="1" sap:searchable="false"/>
+                <EntitySet Name="CustomerValueHelpSet" EntityType="ZFCP_USER_MANAGEMENT_SRV.CustomerValueHelp" sap:searchable="true" sap:content-version="1"/>
             </EntityContainer>
             <atom:link rel="self" href="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
             <atom:link rel="latest-version" href="/sap/opu/odata/sap/ZFCP_USER_MANAGEMENT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
