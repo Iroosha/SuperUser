@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel", 
-    "sap/m/MessageToast"           
-], function (Controller, JSONModel, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox",       
+], function (Controller, JSONModel, MessageToast, MessageBox) {
     "use strict";
 
     return Controller.extend("superusermanagement.controller.ObjectPage", {
@@ -75,43 +76,121 @@ sap.ui.define([
 
             // Turn off edit mode inputs
             this.getView().getModel("ui").setProperty("/isEditMode", false);
+
+            this.getOwnerComponent()
+                .getRouter()
+                .navTo("RouteMain", {}, true);
         },
 
         onSave: function () {
-            var oModel = this.getView().getModel();
-            var oUiModel = this.getView().getModel("ui");
-            var oContext = this.getView().getBindingContext();
-            this.getView().setBusy(true);
+            var oView = this.getView();
+            var oModel = oView.getModel();
+            var oUiModel = oView.getModel("ui");
+            var oContext = oView.getBindingContext();
+            
             oModel.setProperty(oContext.getPath() + "/IsSuper", true);            
             oModel.setUseBatch(false);
 
+            var sEmail = oView.byId("Email").getValue().trim();
+            var sCustomerNo = oView.byId("CustomerNo").getValue().trim();
+            var sFirstName = oView.byId("FirstName").getValue().trim();
+            var sLastName = oView.byId("LastName").getValue().trim();
+
+            if (!sEmail) {
+                MessageBox.error(
+                    "Email is required."
+                );
+                return;
+            }
+
+            if (!sCustomerNo) {
+                MessageBox.error(
+                    "Customer Number is required."
+                );
+                return;
+            }
+
+            if (!sFirstName) {
+                MessageBox.error(
+                    "First Name is required."
+                );
+                return;
+            }
+
+            if (!sLastName) {
+                MessageBox.error(
+                    "Last Name is required."
+                );
+                return;
+            }
+
             var oPayload = {
-                Email:  this.getView().byId("Email").getValue(),
-                CustomerNo:  this.getView().byId("CustomerNo").getValue(),
-                Title:  this.getView().byId("Title").getValue(),
-                FirstName:  this.getView().byId("FirstName").getValue(),
-                LastName:  this.getView().byId("LastName").getValue(),
-                IsActive:  this.getView().byId("IsActive").getSelected(),
-                Phone:  this.getView().byId("Phone").getValue(),
+                Email:  oView.byId("Email").getValue(),
+                CustomerNo:  oView.byId("CustomerNo").getValue(),
+                Title:  oView.byId("Title").getValue(),
+                FirstName:  oView.byId("FirstName").getValue(),
+                LastName:  oView.byId("LastName").getValue(),
+                IsActive:  oView.byId("IsActive").getSelected(),
+                Phone:  oView.byId("Phone").getValue(),
                 IsSuper:  true
             };
 
-            var bIsCreate = this.getView().getModel("appView").getProperty("/isCreateMode"); 
+            var bIsCreate = oView.getModel("appView").getProperty("/isCreateMode"); 
+
+            var router =  this.getOwnerComponent().getRouter();
 
             var mParameters = {
                 success: function(oData, response) {
-                    sap.m.MessageToast.show("Operation completed successfully!");
+                    oView.setBusy(false);
+                     var sSapUserName =
+                            oData && oData.SapUserName
+                                ? oData.SapUserName
+                                : "";
+
+                    var sMessage = sSapUserName
+                            ? "The user was edited successfully.\n\n" +
+                            "Generated SAP user name: " +
+                            sSapUserName
+                            : "The user was created successfully.";
+
+                    //sap.m.MessageToast.show(sMessage);
+
+                    MessageBox.success(sMessage, {
+                            title: "User Created",
+                            actions: [
+                                MessageBox.Action.OK
+                            ],
+                            emphasizedAction:
+                                MessageBox.Action.OK,
+
+                            onClose: function () {
+                                oView.getModel("appView").setProperty("/isCreateMode", false);
+                                
+                                if (this._oCreateContext) {
+                                    oModel.deleteCreatedEntry(
+                                        this._oCreateContext
+                                    );
+
+                                    this._oCreateContext = null;
+                                }
+
+                                router.navTo("RouteMain",{},true);
+                            }.bind(this)
+                        });
                 },
                 error: function(oError) {
-                    sap.m.MessageBox.error("Operation failed.");
+                    oView.setBusy(false);
+                    sap.m.MessageBox.error("An error occurred while saving.");
                 }
             };
 
+            oView.setBusy(true);
+
             if (bIsCreate) {
-                this.getView().setBusy(false);
+                oView.setBusy(false);
                 oModel.create("/FCPUserSet", oPayload, mParameters);              
             } else {
-                this.getView().setBusy(false);
+                oView.setBusy(false);
                 var sPath = oModel.createKey("/FCPUserSet", {
                     Email: oPayload.Email
                 });
