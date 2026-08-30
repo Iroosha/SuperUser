@@ -93,7 +93,7 @@
                                 <Label text="Email" design="Bold" class="sapUiTinyMarginBottom" required="true" textAlign="End"/>
                                 <HBox alignItems="Center">
                                     <Text text="{Email}" visible="{= !${ui>/isEditMode} }" textAlign="Begin" />
-                                    <Input id="Email" value="{Email}" visible="{ui>/isEditMode}" required="true" textAlign="Begin" width="350px" />
+                                    <Input id="Email" value="{Email}" visible="{ui>/isEditMode}" required="true" textAlign="Begin" width="350px" editable="{ui>/isCreateMode}"/>
                                 </HBox>
 
                                 <Label text="Phone" design="Bold"  textAlign="End"/>

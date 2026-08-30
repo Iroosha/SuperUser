@@ -2,7 +2,7 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel", 
     "sap/m/MessageToast",
-    "sap/m/MessageBox",       
+    "sap/m/MessageBox"       
 ], function (Controller, JSONModel, MessageToast, MessageBox) {
     "use strict";
 
@@ -12,9 +12,10 @@ sap.ui.define([
             // Attach a handler that fires every time the "RouteObjectPage" is hit
             oRouter.getRoute("RouteObjectPage").attachPatternMatched(this._onObjectMatched, this);
 
-            // Create a local UI model to control edit/display toggle states
+            // Create a local UI model to control edit/display/create toggle states
             var oUiModel = new JSONModel({
-                isEditMode: false
+                isEditMode: false,
+                isCreateMode: false
             });
             this.getView().setModel(oUiModel, "ui");
         },
@@ -23,10 +24,16 @@ sap.ui.define([
             var sPath = oEvent.getParameter("arguments").emailPath;
             var oModel = this.getView().getModel();
             var oUiModel = this.getView().getModel("ui");
+            var oAppViewModel = this.getOwnerComponent().getModel("appView");
 
             if (sPath === "new") {
-                //Force the page straight into Edit Mode
+                // Update local 'ui' model so editable="{ui>/isCreateMode}" resolves correctly
+                oUiModel.setProperty("/isCreateMode", true);
                 oUiModel.setProperty("/isEditMode", true);
+
+                if (oAppViewModel) {
+                    oAppViewModel.setProperty("/isCreateMode", true);
+                }
 
                 this.getView().unbindElement();
 
@@ -35,7 +42,7 @@ sap.ui.define([
                     this._oCreateContext = null;
                 }
 
-                //Create a clean, blank entry in the OData model buffer
+                // Create a clean, blank entry in the OData model buffer
                 var oContext = oModel.createEntry("/FCPUserSet", {
                     properties: {
                         Email: "",
@@ -47,12 +54,21 @@ sap.ui.define([
                     }
                 });
 
-                //Bind this new temporary entry context directly to the view
+                // Store reference for clean-up on cancel/re-entry
+                this._oCreateContext = oContext;
+
+                // Bind this new temporary entry context directly to the view
                 this.getView().setBindingContext(oContext);
 
             } else {
-                // Regular Display/Edit flow for existing entries
+                // Existing entry flow
+                oUiModel.setProperty("/isCreateMode", false); // Ensures Email stays READ-ONLY on Edit
                 oUiModel.setProperty("/isEditMode", false);
+
+                if (oAppViewModel) {
+                    oAppViewModel.setProperty("/isCreateMode", false);
+                }
+
                 this.getView().setBindingContext(null);
                 this.getView().bindElement({
                     path: "/" + sPath
@@ -61,21 +77,34 @@ sap.ui.define([
         },
 
         onEdit: function () {
-            // Turn on edit mode inputs
-            this.getView().getModel("ui").setProperty("/isEditMode", true);
-            this.getOwnerComponent().getModel("appView").setProperty("/isCreateMode", false);
+            // Turn on edit mode inputs; isCreateMode remains false so Email field is non-editable
+            var oUiModel = this.getView().getModel("ui");
+            oUiModel.setProperty("/isEditMode", true);
+            oUiModel.setProperty("/isCreateMode", false);
+
+            var oAppViewModel = this.getOwnerComponent().getModel("appView");
+            if (oAppViewModel) {
+                oAppViewModel.setProperty("/isCreateMode", false);
+            }
         },
 
         onCancel: function () {
             var oModel = this.getView().getModel();
+            var oUiModel = this.getView().getModel("ui");
             
             // Reject any pending local changes in the OData model buffer
             if (oModel.hasPendingChanges()) {
                 oModel.resetChanges();
             }
 
-            // Turn off edit mode inputs
-            this.getView().getModel("ui").setProperty("/isEditMode", false);
+            if (this._oCreateContext) {
+                oModel.deleteCreatedEntry(this._oCreateContext);
+                this._oCreateContext = null;
+            }
+
+            // Reset UI state
+            oUiModel.setProperty("/isEditMode", false);
+            oUiModel.setProperty("/isCreateMode", false);
 
             this.getOwnerComponent()
                 .getRouter()
@@ -88,7 +117,9 @@ sap.ui.define([
             var oUiModel = oView.getModel("ui");
             var oContext = oView.getBindingContext();
             
-            oModel.setProperty(oContext.getPath() + "/IsSuper", true);            
+            if (oContext) {
+                oModel.setProperty(oContext.getPath() + "/IsSuper", true);            
+            }
             oModel.setUseBatch(false);
 
             var sEmail = oView.byId("Email").getValue().trim();
@@ -97,115 +128,96 @@ sap.ui.define([
             var sLastName = oView.byId("LastName").getValue().trim();
 
             if (!sEmail) {
-                MessageBox.error(
-                    "Email is required."
-                );
+                MessageBox.error("Email is required.");
                 return;
             }
 
             if (!sCustomerNo) {
-                MessageBox.error(
-                    "Customer Number is required."
-                );
+                MessageBox.error("Customer Number is required.");
                 return;
             }
 
             if (!sFirstName) {
-                MessageBox.error(
-                    "First Name is required."
-                );
+                MessageBox.error("First Name is required.");
                 return;
             }
 
             if (!sLastName) {
-                MessageBox.error(
-                    "Last Name is required."
-                );
+                MessageBox.error("Last Name is required.");
                 return;
             }
 
             var oPayload = {
-                Email:  oView.byId("Email").getValue(),
-                CustomerNo:  oView.byId("CustomerNo").getValue(),
-                Title:  oView.byId("Title").getValue(),
-                FirstName:  oView.byId("FirstName").getValue(),
-                LastName:  oView.byId("LastName").getValue(),
-                IsActive:  oView.byId("IsActive").getSelected(),
-                Phone:  oView.byId("Phone").getValue(),
-                IsSuper:  true
+                Email: oView.byId("Email").getValue(),
+                CustomerNo: oView.byId("CustomerNo").getValue(),
+                Title: oView.byId("Title").getValue(),
+                FirstName: oView.byId("FirstName").getValue(),
+                LastName: oView.byId("LastName").getValue(),
+                IsActive: oView.byId("IsActive").getSelected(),
+                Phone: oView.byId("Phone").getValue(),
+                IsSuper: true
             };
 
-            var bIsCreate = oView.getModel("appView").getProperty("/isCreateMode"); 
-
-            var router =  this.getOwnerComponent().getRouter();
+            var bIsCreate = oUiModel.getProperty("/isCreateMode"); 
+            var router = this.getOwnerComponent().getRouter();
 
             var mParameters = {
                 success: function(oData, response) {
                     oView.setBusy(false);
-                     var sSapUserName =
-                            oData && oData.SapUserName
-                                ? oData.SapUserName
-                                : "";
+                    var sSapUserName = oData && oData.SapUserName ? oData.SapUserName : "";
 
-                    var sMessage = sSapUserName
-                            ? "The user was edited successfully.\n\n" +
-                            "Generated SAP user name: " +
-                            sSapUserName
-                            : "The user was created successfully.";
-
-                    //sap.m.MessageToast.show(sMessage);
+                    var sMessage = bIsCreate
+                        ? (sSapUserName 
+                            ? "The user was created successfully.\n\nGenerated SAP user name: " + sSapUserName 
+                            : "The user was created successfully.")
+                        : "The user was edited successfully.";
 
                     MessageBox.success(sMessage, {
-                            title: "User Created",
-                            actions: [
-                                MessageBox.Action.OK
-                            ],
-                            emphasizedAction:
-                                MessageBox.Action.OK,
+                        title: bIsCreate ? "User Created" : "User Updated",
+                        actions: [MessageBox.Action.OK],
+                        emphasizedAction: MessageBox.Action.OK,
+                        onClose: function () {
+                            oUiModel.setProperty("/isCreateMode", false);
+                            oUiModel.setProperty("/isEditMode", false);
 
-                            onClose: function () {
-                                oView.getModel("appView").setProperty("/isCreateMode", false);
-                                
-                                if (this._oCreateContext) {
-                                    oModel.deleteCreatedEntry(
-                                        this._oCreateContext
-                                    );
+                            var oAppViewModel = this.getOwnerComponent().getModel("appView");
+                            if (oAppViewModel) {
+                                oAppViewModel.setProperty("/isCreateMode", false);
+                            }
+                            
+                            if (this._oCreateContext) {
+                                oModel.deleteCreatedEntry(this._oCreateContext);
+                                this._oCreateContext = null;
+                            }
 
-                                    this._oCreateContext = null;
-                                }
-
-                                router.navTo("RouteMain",{},true);
-                            }.bind(this)
-                        });
-                },
+                            router.navTo("RouteMain", {}, true);
+                        }.bind(this)
+                    });
+                }.bind(this),
                 error: function(oError) {
                     oView.setBusy(false);
-                    sap.m.MessageBox.error("An error occurred while saving.");
+                    MessageBox.error("An error occurred while saving.");
                 }
             };
 
             oView.setBusy(true);
 
             if (bIsCreate) {
-                oView.setBusy(false);
                 oModel.create("/FCPUserSet", oPayload, mParameters);              
             } else {
-                oView.setBusy(false);
                 var sPath = oModel.createKey("/FCPUserSet", {
                     Email: oPayload.Email
                 });
                 
                 // Execute PUT/MERGE call
-                oModel.update(sPath, oPayload, mParameters);
+                oModel.update("/" + sPath, oPayload, mParameters);
             }
-
         },
 
-        //Triggered when clicking the input field value help icon
+        // Triggered when clicking the input field value help icon
         onCustomerValueHelpRequest: function (oEvent) {
             var oView = this.getView();
 
-            // Load the fragment asynchronously to preserve performance
             if (!this._pCustomerValueHelpDialog) {
                 this._pCustomerValueHelpDialog = sap.ui.core.Fragment.load({
                     id: oView.getId(),
@@ -218,20 +230,16 @@ sap.ui.define([
             }
 
             this._pCustomerValueHelpDialog.then(function(oDialog) {
-                // Open the dialog
                 oDialog.open();
             });
         },
 
-        //Triggered when typing into the search bar inside the pop-up
+        // Triggered when typing into the search bar inside the pop-up
         onCustomerValueHelpSearch: function (oEvent) {
             var sValue = oEvent.getParameter("value");
-            // Replace "CustomerNo" with the search field property name in your OData entity set
             var oFilter = new sap.ui.model.Filter("CustomerNo", sap.ui.model.FilterOperator.Contains, sValue);
-            
             var oBinding = oEvent.getSource().getBinding("items");
             oBinding.filter([oFilter]);
-
         },
 
         // Triggered when choosing a customer from the selection list
@@ -243,13 +251,9 @@ sap.ui.define([
                 return;
             }
 
-            // Get the technical title property value from the chosen standard list item
             var sSelectedCustomerNo = oSelectedItem.getTitle();
-            
-            // Set the value inside your bound field framework UI component
             oInput.setValue(sSelectedCustomerNo);
 
-            // Explicitly sync the change back to the active underlying OData draft/context entry buffer
             var oContext = this.getView().getBindingContext();
             if (oContext) {
                 var oModel = this.getView().getModel();
